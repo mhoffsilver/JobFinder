@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class JobEntry {
 
-
+	private int id = 0;
 	private Date creationDate = null;
 	private Date modifyDate = null;
 	private Date deletedDate = null;
@@ -33,10 +33,25 @@ public class JobEntry {
 	 * modifyDate is set to now
 	 */
 	public JobEntry(){
-		status = 0;
 		Calendar cal = Calendar.getInstance();
 		creationDate = cal.getTime();
 		modifyDate = cal.getTime();
+	}
+	
+	/**
+	 * getter for the id of the entry
+	 * @return the id of the entry
+	 */
+	public int getId(){
+		return id;
+	}
+	
+	/**
+	 * Sets the identifier of the JobEntry object
+	 * @param identifier the id of the JobEntry
+	 */
+	public void setId(int identifier){
+		id = identifier;
 	}
 	
 	/**
