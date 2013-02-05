@@ -38,6 +38,7 @@ public class JobEntry {
 		modifyDate = cal.getTime();
 		deletedDate = cal.getTime();
 		foreignDate = cal.getTime();
+		deadline = cal.getTime();
 	}
 	
 	/**

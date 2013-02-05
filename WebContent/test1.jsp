@@ -13,6 +13,8 @@ Starting <br />
 DataReader reader = new DataReader();
 JobEntry entry = reader.getEntry(1);
 %>
+
+Extrated <%=entry.getTitle() %> and <%=entry.getCompany() %> from the database <br />
 Finished
 </body>
 </html>
