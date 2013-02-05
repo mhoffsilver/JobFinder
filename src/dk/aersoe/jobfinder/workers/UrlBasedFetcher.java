@@ -46,7 +46,7 @@ public class UrlBasedFetcher implements JobEntryFetcher {
 		URLConnection uc = null;
 		InputStream is = null;
 		try{
-			URL url = new URL("http://www.jobindex.dk/cgi/jobsearch.cgi?q=java&regionid=20&regionid=21&xml=true&output=rss");
+			URL url = new URL(source);
 			uc = url.openConnection();
 			is = uc.getInputStream();
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -113,7 +113,8 @@ public class UrlBasedFetcher implements JobEntryFetcher {
 
 }
 
-/*
+/* example of the serachresult rss item 
+<item>
 <title>
 Developer/System Engineer for FX Algo Trading, Nordea
 </title>
@@ -126,5 +127,6 @@ http://www.jobindex.dk/cgi/click.cgi?jobid=389834&jobtype=h&ctx=r
 <category>Systemudvikling og programmering</category>
 <guid isPermaLink="false">http://www.jobindex.dk/389834</guid>
 <pubDate>Mon, 28 Jan 2013 00:00:00 +0100</pubDate>
-</item> */
+</item> 
+*/
 
