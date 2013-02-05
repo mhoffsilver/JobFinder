@@ -27,9 +27,8 @@ public class DataWriter {
 	 */
 	public boolean writeJobEntry(JobEntry entry, boolean modify){
 		boolean result = false;
-		// Change to Log4J
 		//Logger log = Logger.getRootLogger();
-		Logger log = Logger.getAnonymousLogger();
+		// TODO: Find the best suitable (with respect to the App Server) Logger 
 		Connection con = null;
 		try{
 			String dsName = "JobFinderResource";
@@ -76,7 +75,7 @@ public class DataWriter {
 			}
 		}	
 		catch (Exception e){
-			// Something intelligent should be said here
+			// TODO: Something intelligent should be said here
 		}
 		finally{
 			if (con != null){
@@ -84,7 +83,7 @@ public class DataWriter {
 					con.setAutoCommit(true);
 				}
 				catch(Exception e){
-					// Something went wrong ... log to the best logger
+					// TODO: Add some error handling here
 				}
 			}
 		}
