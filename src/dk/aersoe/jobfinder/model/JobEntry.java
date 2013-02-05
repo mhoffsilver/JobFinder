@@ -36,6 +36,8 @@ public class JobEntry {
 		Calendar cal = Calendar.getInstance();
 		creationDate = cal.getTime();
 		modifyDate = cal.getTime();
+		deletedDate = cal.getTime();
+		foreignDate = cal.getTime();
 	}
 	
 	/**

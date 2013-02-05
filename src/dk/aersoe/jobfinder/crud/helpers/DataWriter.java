@@ -25,7 +25,7 @@ public class DataWriter {
 	 * @param modify
 	 * @return
 	 */
-	public boolean writeJobEntry(JobEntry entry, boolean modify){
+	public boolean writeJobEntry(JobEntry entry, boolean modify) throws Throwable{
 		boolean result = false;
 		//Logger log = Logger.getRootLogger();
 		// TODO: Find the best suitable (with respect to the App Server) Logger 
@@ -39,11 +39,11 @@ public class DataWriter {
 				String createStmt = "update JobEntries set creation_date=?, modify_date=?, foreign_date=?, status=?, deadline=?, title=?, company=?, description=?, url=?, source?) where id=?";
 				con.setAutoCommit(false);
 				PreparedStatement pstmt = con.prepareStatement(createStmt);
-				pstmt.setDate(1, (Date) entry.getCreationDate());
-				pstmt.setDate(2, (Date) entry.getModifyDate());
-				pstmt.setDate(3, (Date) entry.getForeignDate());
+				pstmt.setDate(1, new Date(entry.getCreationDate().getTime()));
+				pstmt.setDate(2, new Date(entry.getModifyDate().getTime()));
+				pstmt.setDate(3, new Date(entry.getForeignDate().getTime()));
 				pstmt.setInt(4, entry.getStatus());
-				pstmt.setDate(5, (Date) entry.getDeadline());
+				pstmt.setDate(5, new Date(entry.getDeadline().getTime()));
 				pstmt.setString(6, entry.getTitle());
 				pstmt.setString(7, entry.getCompany());
 				pstmt.setString(8, entry.getDescription());
@@ -59,11 +59,11 @@ public class DataWriter {
 				String createStmt = "insert into JobEntries (creation_date, modify_date, foreign_date, status, deadline, title, company, description, url, source) values(?,?,?,?,?,?,?,?,?,?)";
 				con.setAutoCommit(false);
 				PreparedStatement pstmt = con.prepareStatement(createStmt);
-				pstmt.setDate(1, (Date) entry.getCreationDate());
-				pstmt.setDate(2, (Date) entry.getModifyDate());
-				pstmt.setDate(3, (Date) entry.getForeignDate());
+				pstmt.setDate(1, new Date(entry.getCreationDate().getTime()));
+				pstmt.setDate(2, new Date(entry.getModifyDate().getTime()));
+				pstmt.setDate(3, new Date(entry.getForeignDate().getTime()));
 				pstmt.setInt(4, entry.getStatus());
-				pstmt.setDate(5, (Date) entry.getDeadline());
+				pstmt.setDate(5, new Date(entry.getDeadline().getTime()));
 				pstmt.setString(6, entry.getTitle());
 				pstmt.setString(7, entry.getCompany());
 				pstmt.setString(8, entry.getDescription());
@@ -75,6 +75,7 @@ public class DataWriter {
 			}
 		}	
 		catch (Exception e){
+			throw e;
 			// TODO: Something intelligent should be said here
 		}
 		finally{
