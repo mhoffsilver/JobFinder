@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.naming.InitialContext;
@@ -28,7 +29,7 @@ public class DataReader {
 	 * @param id the id of the requested JobEntry
 	 * @return a JobEntry object or null if the id is not found in the table
 	 */
-	public JobEntry getEntry(int id){
+	public JobEntry getEntry(int id) throws Throwable{
 		JobEntry result = null;
 		String dsName = "JobFinderResource";
 		DataSource ds = null;
@@ -36,28 +37,20 @@ public class DataReader {
 		try {
 			ds = (javax.sql.DataSource)new InitialContext().lookup(dsName);
 			con = ds.getConnection();
-			PreparedStatement pstmt = con.prepareStatement("select * from JobEntries where id = ?");
+			PreparedStatement pstmt = con.prepareStatement("select * from JobEntries where id = ? order by id");
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
-			while (rs != null && rs.next()){
-				result = new JobEntry();
-				result.setId(rs.getInt("id"));
-				result.setCreationDate(rs.getDate("creation_date"));
-				result.setModifyDate(rs.getDate("modify_date"));
-				result.setDeletedDate(rs.getDate("deleted_date"));
-				result.setForeignDate(rs.getDate("foreign_date"));
-				result.setStatus(rs.getInt("status"));
-				result.setDeadline(rs.getDate("deadline"));
-				result.setCategory(rs.getString("category"));
-				result.setTitle(rs.getString("title"));
-				result.setCompany(rs.getString("company"));
-				result.setDescription(rs.getString("description"));
-				result.setUrl(rs.getString("url"));
-				result.setSource(rs.getString("source"));
+			if (rs != null){
+				Set<JobEntry> extractedData = extractData(rs);
+				Iterator<JobEntry> it = extractedData.iterator();
+				if (it.hasNext()){
+					result = it.next();
+				}
 			}
 		} 
 		catch (Exception e) {
-			// TODO Add some error handling
+			// TODO Could be handled a little nicer with some serious logging - Implement in due cause
+			throw e;
 		}
 		finally{
 			try {
@@ -81,27 +74,10 @@ public class DataReader {
 		try {
 			ds = (javax.sql.DataSource)new InitialContext().lookup(dsName);
 			con = ds.getConnection();
-			PreparedStatement pstmt = con.prepareStatement("select * from JobEntries");
+			PreparedStatement pstmt = con.prepareStatement("select * from JobEntries order by id asc");
 			ResultSet rs = pstmt.executeQuery();
 			if (rs != null){ // unsure if it may happen that the result set is null
-				result = new HashSet<JobEntry>();
-				while (rs.next()){
-					JobEntry entry = new JobEntry();
-					entry.setId(rs.getInt("id"));
-					entry.setCreationDate(rs.getDate("creation_date"));
-					entry.setModifyDate(rs.getDate("modify_date"));
-					entry.setDeletedDate(rs.getDate("deleted_date"));
-					entry.setForeignDate(rs.getDate("foreign_date"));
-					entry.setStatus(rs.getInt("status"));
-					entry.setDeadline(rs.getDate("deadline"));
-					entry.setCategory(rs.getString("category"));
-					entry.setTitle(rs.getString("title"));
-					entry.setCompany(rs.getString("company"));
-					entry.setDescription(rs.getString("description"));
-					entry.setUrl(rs.getString("url"));
-					entry.setSource(rs.getString("source"));
-					result.add(entry);
-				}
+				result = extractData(rs);
 			}
 		}
 		catch(Exception e){
@@ -136,24 +112,7 @@ public class DataReader {
 			pstmt.setString(2, value);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs != null){ // unsure if it may happen that the result set is null
-				result = new HashSet<JobEntry>();
-				while (rs.next()){
-					JobEntry entry = new JobEntry();
-					entry.setId(rs.getInt("id"));
-					entry.setCreationDate(rs.getDate("creation_date"));
-					entry.setModifyDate(rs.getDate("modify_date"));
-					entry.setDeletedDate(rs.getDate("deleted_date"));
-					entry.setForeignDate(rs.getDate("foreign_date"));
-					entry.setStatus(rs.getInt("status"));
-					entry.setDeadline(rs.getDate("deadline"));
-					entry.setCategory(rs.getString("category"));
-					entry.setTitle(rs.getString("title"));
-					entry.setCompany(rs.getString("company"));
-					entry.setDescription(rs.getString("description"));
-					entry.setUrl(rs.getString("url"));
-					entry.setSource(rs.getString("source"));
-					result.add(entry);
-				}
+				result = extractData(rs);
 			}
 		}
 		catch(Exception e){
@@ -205,6 +164,34 @@ public class DataReader {
 		}
 		catch(Exception e){
 			// TODO Add error handling
+		}
+		return result;
+	}
+	
+	/**
+	 * Method to extract a Set containing the rows in the ResultSet from the query
+	 * @param rs ResultSet containing the query result
+	 * @return Set containing JobEntry objects representing the result of th equery 
+	 * @throws SQLException
+	 */
+	private Set<JobEntry> extractData(ResultSet rs) throws SQLException{
+		Set<JobEntry> result = new HashSet<JobEntry>();
+		while (rs.next()){
+			JobEntry entry = new JobEntry();
+			entry.setId(rs.getInt("id"));
+			entry.setCreationDate(rs.getDate("creation_date"));
+			entry.setModifyDate(rs.getDate("modify_date"));
+			entry.setDeletedDate(rs.getDate("deleted_date"));
+			entry.setForeignDate(rs.getDate("foreign_date"));
+			entry.setStatus(rs.getInt("status"));
+			entry.setDeadline(rs.getDate("deadline"));
+			entry.setCategory(rs.getString("category"));
+			entry.setTitle(rs.getString("title"));
+			entry.setCompany(rs.getString("company"));
+			entry.setDescription(rs.getString("description"));
+			entry.setUrl(rs.getString("url"));
+			entry.setSource(rs.getString("source"));
+			result.add(entry);
 		}
 		return result;
 	}

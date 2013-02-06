@@ -33,9 +33,9 @@ public class DataWriter {
 			String dsName = "JobFinderResource";
 			DataSource ds = (javax.sql.DataSource)new InitialContext().lookup(dsName);
 			con = ds.getConnection();
-			String createStmt = "insert into JobEntries (creation_date, modify_date, foreign_date, status, deadline, title, company, description, url, source) values(?,?,?,?,?,?,?,?,?,?)";
+			String createStmt = "insert into JobEntries (creation_date, modify_date, foreign_date, status, deadline, category, title, company, description, url, source) values(?,?,?,?,?,?,?,?,?,?,?)";
 			if (modify){
-				createStmt = "update JobEntries set creation_date=?, modify_date=?, foreign_date=?, status=?, deadline=?, title=?, company=?, description=?, url=?, source?) where id=?";
+				createStmt = "update JobEntries set creation_date=?, modify_date=?, foreign_date=?, status=?, deadline=?, category=? title=?, company=?, description=?, url=?, source?) where id=?";
 			}
 			con.setAutoCommit(false);
 			PreparedStatement pstmt = con.prepareStatement(createStmt);
@@ -44,13 +44,14 @@ public class DataWriter {
 			pstmt.setDate(3, new Date(entry.getForeignDate().getTime()));
 			pstmt.setInt(4, entry.getStatus());
 			pstmt.setDate(5, new Date(entry.getDeadline().getTime()));
-			pstmt.setString(6, entry.getTitle());
-			pstmt.setString(7, entry.getCompany());
-			pstmt.setString(8, entry.getDescription());
-			pstmt.setString(9,  entry.getUrl());
-			pstmt.setString(10, entry.getSource());
+			pstmt.setString(6, entry.getCategory());
+			pstmt.setString(7, entry.getTitle());
+			pstmt.setString(8, entry.getCompany());
+			pstmt.setString(9, entry.getDescription());
+			pstmt.setString(10,  entry.getUrl());
+			pstmt.setString(11, entry.getSource());
 			if (modify){
-				pstmt.setInt(11, entry.getId());
+				pstmt.setInt(12, entry.getId());
 			}
 			pstmt.executeUpdate();
 			con.commit();
@@ -64,6 +65,7 @@ public class DataWriter {
 			if (con != null){
 				try{
 					con.setAutoCommit(true);
+					con.close();
 				}
 				catch(Exception e){
 					// TODO: Add some error handling here
