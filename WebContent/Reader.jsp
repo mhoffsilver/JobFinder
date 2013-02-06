@@ -27,6 +27,10 @@ else{
 		entry = it.next();
 	}
 }
+// NullGuard the otherway around - temporary fix!!!
+if (entry == null){
+	entry = new JobEntry();
+}
 %>
 ID:<br /> <%=entry.getId() %><br /><br /> 
 Foreign Date:<br /> <%=entry.getForeignDate() %><br /><br /> 

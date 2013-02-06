@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.naming.InitialContext;
@@ -193,6 +196,9 @@ public class DataReader {
 			entry.setSource(rs.getString("source"));
 			result.add(entry);
 		}
+		//List list = new LinkedList<JobEntry>(result);
+		//Collections.sort(list);
+		//result = new HashSet<JobEntry>(list);
 		return result;
 	}
 }
