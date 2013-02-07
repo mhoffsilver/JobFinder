@@ -196,9 +196,9 @@ public class DataReader {
 			entry.setSource(rs.getString("source"));
 			result.add(entry);
 		}
-		//List list = new LinkedList<JobEntry>(result);
-		//Collections.sort(list);
-		//result = new HashSet<JobEntry>(list);
+		List list = new LinkedList<JobEntry>(result);
+		Collections.sort(list);
+		result = new HashSet<JobEntry>(list);
 		return result;
 	}
 }

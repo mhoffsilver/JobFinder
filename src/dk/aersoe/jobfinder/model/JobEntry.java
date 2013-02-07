@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Morten morten@aersoe.dk
  *
  */
-public class JobEntry {
+public class JobEntry implements Comparable<JobEntry> {
 
 	private int id = 0;
 	private Date creationDate = null;
@@ -256,6 +256,19 @@ public class JobEntry {
 	 */
 	public String toString(){
 		String result = getCategory() + ", " + getCompany() + ", "+ getTitle();
+		return result;
+	}
+
+	@Override
+	public int compareTo(JobEntry that) {
+		int result = 0;
+		if (this.getId() > that.getId()){
+			result = 1;
+		}
+		if (this.getId() < that.getId()){
+			result = -1;
+		}
+		// if none of the above have been met the two id's are equal and the Entries are the same
 		return result;
 	}
 }
