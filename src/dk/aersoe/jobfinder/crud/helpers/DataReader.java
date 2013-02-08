@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,8 @@ import java.util.Set;
 import javax.naming.InitialContext;
 import javax.naming.NamingException; // Not used for now! but will be when verbose logging is implemented
 import javax.sql.DataSource;
+
+import org.apache.log4j.*;
 
 import dk.aersoe.jobfinder.model.JobEntry;
 
@@ -26,6 +29,11 @@ import dk.aersoe.jobfinder.model.JobEntry;
  */
 public class DataReader {
 	
+	private Logger log = null;
+	
+	public DataReader(){
+		log = Logger.getLogger("jobfinder");
+	}
 	
 	/**
 	 * Gets a JobEntry from the database based on the id of the JobEntry
@@ -178,7 +186,7 @@ public class DataReader {
 	 * @throws SQLException
 	 */
 	private Set<JobEntry> extractData(ResultSet rs) throws SQLException{
-		Set<JobEntry> result = new HashSet<JobEntry>();
+		Set<JobEntry> result = new LinkedHashSet<JobEntry>();
 		while (rs.next()){
 			JobEntry entry = new JobEntry();
 			entry.setId(rs.getInt("id"));
@@ -196,9 +204,7 @@ public class DataReader {
 			entry.setSource(rs.getString("source"));
 			result.add(entry);
 		}
-		List list = new LinkedList<JobEntry>(result);
-		Collections.sort(list);
-		result = new HashSet<JobEntry>(list);
+		log.debug("The resulting set is: " + result);
 		return result;
 	}
 }

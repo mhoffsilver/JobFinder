@@ -255,7 +255,8 @@ public class JobEntry implements Comparable<JobEntry> {
 	 * 
 	 */
 	public String toString(){
-		String result = getCategory() + ", " + getCompany() + ", "+ getTitle();
+		//String result = getCategory() + ", " + getCompany() + ", "+ getTitle();
+		String result = getId() + "-";
 		return result;
 	}
 
